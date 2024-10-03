@@ -840,12 +840,13 @@ c 00012    Fully hadronic with at least one charm
       equivalence (probs(1,1),prbs(1))
       integer ini,ii(5),j,k,imode
       logical semileptonic
+      logical VcbOnly
       real * 8 random,powheginput
       external random,powheginput
       data ini/0/
 c pdg id's of 1st and 2nd W+ decay products for e,mu,tau,up and charm decays (ignoring CKM)
       data ((iwp(j,k),k=1,2),j=1,5)/-11,12, -13,14, -15,16, -1,2, -3,4/
-      save ini,probs,iwp,mass,sin2cabibbo,semileptonic
+      save ini,probs,iwp,mass,sin2cabibbo,semileptonic,VcbOnly
       # Vud2, Vus2, Vub2, Vcd2, Vcs2, Vcb2, Vtd2, Vts2, Vtb2
       if(ini.eq.2) return
       if(ini.eq.0) then
@@ -854,6 +855,7 @@ c on first run look for decay mode in powheginput
          imode=powheginput('topdecaymode')
 	   imode='00022'
          semileptonic=powheginput('#semileptonic').eq.1
+         VcbOnly=powheginput('#VcbOnly').eq.1
          if(imode.eq.0) then
             ini=2
             return
@@ -905,6 +907,9 @@ c on first run look for decay mode in powheginput
             if(semileptonic) then
                write(*,*) 'semileptonic=1'
             endif
+            if(VcbOnly) then
+               write(*,*) 'VcbOnly=1'
+            endif
             write(*,*) ' Halting execution'
             stop
          endif
@@ -945,53 +950,56 @@ c now we have j,k decay mode
       iwa(2)=iwp(j,2)
       iwa(3)=-iwp(k,1)
       iwa(4)=-iwp(k,2)
+
+      if(VcbOnly) then
+c one should be decay into charm
+            integer plusCBdecay/0/
+            if(random().lt.0.5) then
+                  plusCBdecay=1
+            endif
+            if(plusCBdecay.eq.1) then
+                  iwa(1)=-5
+                  iwa(2)=4
+                  do j=3,4,1
+                        if(abs(iwa(j)).eq.1) then
+                              if(random().lt.sin2cabibbo) then
+                                    iwa(j)=sign(3,iwa(j))
+                              endif
+                        elseif(abs(iwa(j)).eq.3) then
+                              if(random().lt.sin2cabibbo) then
+                                    iwa(j)=sign(1,iwa(j))
+                              endif
+                        endif
+                  enddo
+            elseif(plusCBdecay.eq.0) then
+                  iwa(3)=5
+                  iwa(4)=-4
+                  do j=1,2,1
+                        if(abs(iwa(j)).eq.1) then
+                              if(random().lt.sin2cabibbo) then
+                                    iwa(j)=sign(3,iwa(j))
+                              endif
+                        elseif(abs(iwa(j)).eq.3) then
+                              if(random().lt.sin2cabibbo) then
+                                    iwa(j)=sign(1,iwa(j))
+                              endif
+                        endif
+                  enddo
+            endif
+      else
 c if any is down or strange, it may turn to
 c strange/down with a probability sin^2 theta
-      ! do j=1,4,1
-      !    if(abs(iwa(j)).eq.1) then
-      !       if(random().lt.sin2cabibbo) then
-      !          iwa(j)=sign(3,iwa(j))
-      !       endif
-      !    elseif(abs(iwa(j)).eq.3) then
-      !       if(random().lt.sin2cabibbo) then
-      !          iwa(j)=sign(1,iwa(j))
-      !       endif
-      !    endif
-      ! enddo
-c one should be decay into cb
-	integer plusCBdecay/0/
-	if(random().lt.0.5) then
-		plusCBdecay=1
-	endif
-	if(plusCBdecay.eq.1) then
-		iwa(1)=-5
-		iwa(2)=4
-		do j=3,4,1
-			if(abs(iwa(j)).eq.1) then
-				if(random().lt.sin2cabibbo) then
-					iwa(j)=sign(3,iwa(j))
-				endif
-			elseif(abs(iwa(j)).eq.3) then
-				if(random().lt.sin2cabibbo) then
-					iwa(j)=sign(1,iwa(j))
-				endif
-			endif
-		enddo
-	elseif(plusCBdecay.eq.0) then
-		iwa(3)=5
-		iwa(4)=-4
-		do j=1,2,1
-			if(abs(iwa(j)).eq.1) then
-				if(random().lt.sin2cabibbo) then
-					iwa(j)=sign(3,iwa(j))
-				endif
-			elseif(abs(iwa(j)).eq.3) then
-				if(random().lt.sin2cabibbo) then
-					iwa(j)=sign(1,iwa(j))
-				endif
-			endif
-		enddo
-	endif
+            do j=1,4,1
+                  if(abs(iwa(j)).eq.1) then
+                        if(random().lt.sin2cabibbo) then
+                        iwa(j)=sign(3,iwa(j))
+                        endif
+                  elseif(abs(iwa(j)).eq.3) then
+                        if(random().lt.sin2cabibbo) then
+                        iwa(j)=sign(1,iwa(j))
+                        endif
+                  endif
+            enddo
 
 
 
