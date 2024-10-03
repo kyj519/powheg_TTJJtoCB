@@ -832,11 +832,11 @@ c 00002    Fully hadronic with two charms
 c 00011    Fully hadronic with a single charm
 c 00012    Fully hadronic with at least one charm
       implicit none
-      integer iwp1,iwp2, iwm1,iwm2, iwp(5,2),iwa(4)
+      integer iwp1,iwp2, iwm1,iwm2, iwp(5,2),iwa(4),plusCBdecay
       real * 8 mdecwp1,mdecwp2,mdecwm1,mdecwm2
       real * 8 probs(5,5),prbs(25),pr(5),mass(16),
-     #     sin2cabibbo,ebr,hbr,r,totbr
-     # Vud2, Vus2, Vub2, Vcd2, Vcs2, Vcb2, Vtd2, Vts2, Vtb2
+     #     sin2cabibbo,ebr,hbr,r,totbr,
+     # Vud2,Vus2,Vub2,Vcd2,Vcs2,Vcb2,Vtd2,Vts2,Vtb2
       equivalence (probs(1,1),prbs(1))
       integer ini,ii(5),j,k,imode
       logical semileptonic
@@ -846,13 +846,13 @@ c 00012    Fully hadronic with at least one charm
 c pdg id's of 1st and 2nd W+ decay products for e,mu,tau,up and charm decays (ignoring CKM)
       data ((iwp(j,k),k=1,2),j=1,5)/-11,12, -13,14, -15,16, -1,2, -3,4/
       save ini,probs,iwp,mass,sin2cabibbo,semileptonic
-      # Vud2, Vus2, Vub2, Vcd2, Vcs2, Vcb2, Vtd2, Vts2, Vtb2
+      save Vud2,Vus2,Vub2,Vcd2,Vcs2,Vcb2,Vtd2,Vts2,Vtb2
       if(ini.eq.2) return
       if(ini.eq.0) then
          ini=1
 c on first run look for decay mode in powheginput
          imode=powheginput('topdecaymode')
-	   imode='00022'
+	   imode=00022
          semileptonic=powheginput('#semileptonic').eq.1
          if(imode.eq.0) then
             ini=2
@@ -920,15 +920,15 @@ c on first run look for decay mode in powheginput
          mass(4)=powheginput('tdec/cmass')
 	   mass(5)=powheginput('tdec/bmass')
          sin2cabibbo=powheginput('tdec/sin2cabibbo')
-         Vud2=powheginput('tdec/Vud2')
-         Vus2=powheginput('tdec/Vus2')
-         Vub2=powheginput('tdec/Vub2')
-         Vcd2=powheginput('tdec/Vcd2')
-         Vcs2=powheginput('tdec/Vcs2')
-         Vcb2=powheginput('tdec/Vcb2')
-         Vtd2=powheginput('tdec/Vtd2')
-         Vts2=powheginput('tdec/Vts2')
-         Vtb2=powheginput('tdec/Vtb2')
+      !    Vud2=powheginput('tdec/Vud2')
+      !    Vus2=powheginput('tdec/Vus2')
+      !    Vub2=powheginput('tdec/Vub2')
+      !    Vcd2=powheginput('tdec/Vcd2')
+      !    Vcs2=powheginput('tdec/Vcs2')
+      !    Vcb2=powheginput('tdec/Vcb2')
+      !    Vtd2=powheginput('tdec/Vtd2')
+      !    Vts2=powheginput('tdec/Vts2')
+      !    Vtb2=powheginput('tdec/Vtb2')
 
          return
       endif
@@ -959,9 +959,10 @@ c strange/down with a probability sin^2 theta
       !    endif
       ! enddo
 c one should be decay into cb
-	integer plusCBdecay/0/
 	if(random().lt.0.5) then
 		plusCBdecay=1
+      else
+            plusCBdecay=0
 	endif
 	if(plusCBdecay.eq.1) then
 		iwa(1)=-5
