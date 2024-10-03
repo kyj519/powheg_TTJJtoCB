@@ -844,6 +844,7 @@ c 00012    Fully hadronic with at least one charm
       real * 8 random,powheginput
       external random,powheginput
       data ini/0/
+      data plusCBdecay/0/
 c pdg id's of 1st and 2nd W+ decay products for e,mu,tau,up and charm decays (ignoring CKM)
       data ((iwp(j,k),k=1,2),j=1,5)/-11,12, -13,14, -15,16, -1,2, -3,4/
       save ini,probs,iwp,mass,sin2cabibbo,semileptonic
@@ -953,7 +954,6 @@ c now we have j,k decay mode
 
       if(VcbOnly) then
 c one should be decay into charm
-            integer plusCBdecay/0/
             if(random().lt.0.5) then
                   plusCBdecay=1
             endif
@@ -1000,6 +1000,7 @@ c strange/down with a probability sin^2 theta
                         endif
                   endif
             enddo
+      endif
 
 
 
