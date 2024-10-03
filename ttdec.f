@@ -832,11 +832,11 @@ c 00002    Fully hadronic with two charms
 c 00011    Fully hadronic with a single charm
 c 00012    Fully hadronic with at least one charm
       implicit none
-      integer iwp1,iwp2, iwm1,iwm2, iwp(5,2),iwa(4)
+      integer iwp1,iwp2, iwm1,iwm2, iwp(5,2),iwa(4),plusCBdecay
       real * 8 mdecwp1,mdecwp2,mdecwm1,mdecwm2
       real * 8 probs(5,5),prbs(25),pr(5),mass(16),
-     #     sin2cabibbo,ebr,hbr,r,totbr
-     # Vud2, Vus2, Vub2, Vcd2, Vcs2, Vcb2, Vtd2, Vts2, Vtb2
+     #     sin2cabibbo,ebr,hbr,r,totbr,
+     # Vud2,Vus2,Vub2,Vcd2,Vcs2,Vcb2,Vtd2,Vts2,Vtb2
       equivalence (probs(1,1),prbs(1))
       integer ini,ii(5),j,k,imode
       logical semileptonic
@@ -846,14 +846,19 @@ c 00012    Fully hadronic with at least one charm
       data ini/0/
 c pdg id's of 1st and 2nd W+ decay products for e,mu,tau,up and charm decays (ignoring CKM)
       data ((iwp(j,k),k=1,2),j=1,5)/-11,12, -13,14, -15,16, -1,2, -3,4/
+<<<<<<< HEAD
       save ini,probs,iwp,mass,sin2cabibbo,semileptonic,VcbOnly
       # Vud2, Vus2, Vub2, Vcd2, Vcs2, Vcb2, Vtd2, Vts2, Vtb2
+=======
+      save ini,probs,iwp,mass,sin2cabibbo,semileptonic
+      save Vud2,Vus2,Vub2,Vcd2,Vcs2,Vcb2,Vtd2,Vts2,Vtb2
+>>>>>>> a86d2688f5a2673654fc3b5e89d0cba0133e2736
       if(ini.eq.2) return
       if(ini.eq.0) then
          ini=1
 c on first run look for decay mode in powheginput
          imode=powheginput('topdecaymode')
-	   imode='00022'
+	   imode=00022
          semileptonic=powheginput('#semileptonic').eq.1
          VcbOnly=powheginput('#VcbOnly').eq.1
          if(imode.eq.0) then
@@ -925,15 +930,15 @@ c on first run look for decay mode in powheginput
          mass(4)=powheginput('tdec/cmass')
 	   mass(5)=powheginput('tdec/bmass')
          sin2cabibbo=powheginput('tdec/sin2cabibbo')
-         Vud2=powheginput('tdec/Vud2')
-         Vus2=powheginput('tdec/Vus2')
-         Vub2=powheginput('tdec/Vub2')
-         Vcd2=powheginput('tdec/Vcd2')
-         Vcs2=powheginput('tdec/Vcs2')
-         Vcb2=powheginput('tdec/Vcb2')
-         Vtd2=powheginput('tdec/Vtd2')
-         Vts2=powheginput('tdec/Vts2')
-         Vtb2=powheginput('tdec/Vtb2')
+      !    Vud2=powheginput('tdec/Vud2')
+      !    Vus2=powheginput('tdec/Vus2')
+      !    Vub2=powheginput('tdec/Vub2')
+      !    Vcd2=powheginput('tdec/Vcd2')
+      !    Vcs2=powheginput('tdec/Vcs2')
+      !    Vcb2=powheginput('tdec/Vcb2')
+      !    Vtd2=powheginput('tdec/Vtd2')
+      !    Vts2=powheginput('tdec/Vts2')
+      !    Vtb2=powheginput('tdec/Vtb2')
 
          return
       endif
@@ -989,6 +994,7 @@ c one should be decay into charm
       else
 c if any is down or strange, it may turn to
 c strange/down with a probability sin^2 theta
+<<<<<<< HEAD
             do j=1,4,1
                   if(abs(iwa(j)).eq.1) then
                         if(random().lt.sin2cabibbo) then
@@ -1000,6 +1006,54 @@ c strange/down with a probability sin^2 theta
                         endif
                   endif
             enddo
+=======
+      ! do j=1,4,1
+      !    if(abs(iwa(j)).eq.1) then
+      !       if(random().lt.sin2cabibbo) then
+      !          iwa(j)=sign(3,iwa(j))
+      !       endif
+      !    elseif(abs(iwa(j)).eq.3) then
+      !       if(random().lt.sin2cabibbo) then
+      !          iwa(j)=sign(1,iwa(j))
+      !       endif
+      !    endif
+      ! enddo
+c one should be decay into cb
+	if(random().lt.0.5) then
+		plusCBdecay=1
+      else
+            plusCBdecay=0
+	endif
+	if(plusCBdecay.eq.1) then
+		iwa(1)=-5
+		iwa(2)=4
+		do j=3,4,1
+			if(abs(iwa(j)).eq.1) then
+				if(random().lt.sin2cabibbo) then
+					iwa(j)=sign(3,iwa(j))
+				endif
+			elseif(abs(iwa(j)).eq.3) then
+				if(random().lt.sin2cabibbo) then
+					iwa(j)=sign(1,iwa(j))
+				endif
+			endif
+		enddo
+	elseif(plusCBdecay.eq.0) then
+		iwa(3)=5
+		iwa(4)=-4
+		do j=1,2,1
+			if(abs(iwa(j)).eq.1) then
+				if(random().lt.sin2cabibbo) then
+					iwa(j)=sign(3,iwa(j))
+				endif
+			elseif(abs(iwa(j)).eq.3) then
+				if(random().lt.sin2cabibbo) then
+					iwa(j)=sign(1,iwa(j))
+				endif
+			endif
+		enddo
+	endif
+>>>>>>> a86d2688f5a2673654fc3b5e89d0cba0133e2736
 
 
 
