@@ -956,6 +956,8 @@ c now we have j,k decay mode
 c one should be decay into charm
             if(random().lt.0.5) then
                   plusCBdecay=1
+            elseif(random().ge.0.5) then
+                  plusCBdecay=0
             endif
             if(plusCBdecay.eq.1) then
                   iwa(1)=-5
