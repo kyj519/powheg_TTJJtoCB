@@ -847,7 +847,7 @@ c 00012    Fully hadronic with at least one charm
       data plusCBdecay/0/
 c pdg id's of 1st and 2nd W+ decay products for e,mu,tau,up and charm decays (ignoring CKM)
       data ((iwp(j,k),k=1,2),j=1,5)/-11,12, -13,14, -15,16, -1,2, -3,4/
-      save ini,probs,iwp,mass,sin2cabibbo,semileptonic
+      save ini,probs,iwp,mass,sin2cabibbo,semileptonic,VcbOnly
       save Vud2,Vus2,Vub2,Vcd2,Vcs2,Vcb2,Vtd2,Vts2,Vtb2
       if(ini.eq.2) return
       if(ini.eq.0) then
