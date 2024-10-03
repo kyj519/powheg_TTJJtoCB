@@ -846,13 +846,8 @@ c 00012    Fully hadronic with at least one charm
       data ini/0/
 c pdg id's of 1st and 2nd W+ decay products for e,mu,tau,up and charm decays (ignoring CKM)
       data ((iwp(j,k),k=1,2),j=1,5)/-11,12, -13,14, -15,16, -1,2, -3,4/
-<<<<<<< HEAD
-      save ini,probs,iwp,mass,sin2cabibbo,semileptonic,VcbOnly
-      # Vud2, Vus2, Vub2, Vcd2, Vcs2, Vcb2, Vtd2, Vts2, Vtb2
-=======
       save ini,probs,iwp,mass,sin2cabibbo,semileptonic
       save Vud2,Vus2,Vub2,Vcd2,Vcs2,Vcb2,Vtd2,Vts2,Vtb2
->>>>>>> a86d2688f5a2673654fc3b5e89d0cba0133e2736
       if(ini.eq.2) return
       if(ini.eq.0) then
          ini=1
@@ -994,7 +989,6 @@ c one should be decay into charm
       else
 c if any is down or strange, it may turn to
 c strange/down with a probability sin^2 theta
-<<<<<<< HEAD
             do j=1,4,1
                   if(abs(iwa(j)).eq.1) then
                         if(random().lt.sin2cabibbo) then
@@ -1006,54 +1000,6 @@ c strange/down with a probability sin^2 theta
                         endif
                   endif
             enddo
-=======
-      ! do j=1,4,1
-      !    if(abs(iwa(j)).eq.1) then
-      !       if(random().lt.sin2cabibbo) then
-      !          iwa(j)=sign(3,iwa(j))
-      !       endif
-      !    elseif(abs(iwa(j)).eq.3) then
-      !       if(random().lt.sin2cabibbo) then
-      !          iwa(j)=sign(1,iwa(j))
-      !       endif
-      !    endif
-      ! enddo
-c one should be decay into cb
-	if(random().lt.0.5) then
-		plusCBdecay=1
-      else
-            plusCBdecay=0
-	endif
-	if(plusCBdecay.eq.1) then
-		iwa(1)=-5
-		iwa(2)=4
-		do j=3,4,1
-			if(abs(iwa(j)).eq.1) then
-				if(random().lt.sin2cabibbo) then
-					iwa(j)=sign(3,iwa(j))
-				endif
-			elseif(abs(iwa(j)).eq.3) then
-				if(random().lt.sin2cabibbo) then
-					iwa(j)=sign(1,iwa(j))
-				endif
-			endif
-		enddo
-	elseif(plusCBdecay.eq.0) then
-		iwa(3)=5
-		iwa(4)=-4
-		do j=1,2,1
-			if(abs(iwa(j)).eq.1) then
-				if(random().lt.sin2cabibbo) then
-					iwa(j)=sign(3,iwa(j))
-				endif
-			elseif(abs(iwa(j)).eq.3) then
-				if(random().lt.sin2cabibbo) then
-					iwa(j)=sign(1,iwa(j))
-				endif
-			endif
-		enddo
-	endif
->>>>>>> a86d2688f5a2673654fc3b5e89d0cba0133e2736
 
 
 
