@@ -958,11 +958,11 @@ c now we have j,k decay mode
                         if(abs(iwa(j)).eq.1) then
                               iwa(j)=sign(5,iwa(j))
                         elseif(abs(iwa(j)).eq.3) then
-                              iwa(j)=sign(4,iwa(j))
+                              iwa(j)=sign(5,iwa(j))
                         elseif(abs(iwa(j)).eq.2) then
-                              iwa(j)=sign(5,iwa(j))
+                              iwa(j)=sign(4,iwa(j))
                         elseif(abs(iwa(j)).eq.4) then
-                              iwa(j)=sign(5,iwa(j))
+                              iwa(j)=sign(4,iwa(j))
                         endif
                   enddo
             else
