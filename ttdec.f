@@ -854,7 +854,6 @@ c pdg id's of 1st and 2nd W+ decay products for e,mu,tau,up and charm decays (ig
          ini=1
 c on first run look for decay mode in powheginput
          imode=powheginput('topdecaymode')
-	   imode=00022
          semileptonic=powheginput('#semileptonic').eq.1
          VcbOnly=powheginput('#VcbOnly').eq.1
          if(imode.eq.0) then
@@ -953,42 +952,57 @@ c now we have j,k decay mode
       iwa(4)=-iwp(k,2)
 
       if(VcbOnly) then
-c one should be decay into charm
-            if(random().lt.0.5) then
-                  plusCBdecay=1
-            elseif(random().ge.0.5) then
-                  plusCBdecay=0
-            endif
-            if(plusCBdecay.eq.1) then
-                  iwa(1)=-5
-                  iwa(2)=4
-                  do j=3,4,1
+            if(semileptonic) then
+
+                  do j=1,4,1
                         if(abs(iwa(j)).eq.1) then
-                              if(random().lt.sin2cabibbo) then
-                                    iwa(j)=sign(3,iwa(j))
-                              endif
+                              iwa(j)=sign(5,iwa(j))
                         elseif(abs(iwa(j)).eq.3) then
-                              if(random().lt.sin2cabibbo) then
-                                    iwa(j)=sign(1,iwa(j))
-                              endif
+                              iwa(j)=sign(4,iwa(j))
+                        elseif(abs(iwa(j)).eq.2) then
+                              iwa(j)=sign(5,iwa(j))
+                        elseif(abs(iwa(j)).eq.4) then
+                              iwa(j)=sign(5,iwa(j))
                         endif
                   enddo
-            elseif(plusCBdecay.eq.0) then
-                  iwa(3)=5
-                  iwa(4)=-4
-                  do j=1,2,1
-                        if(abs(iwa(j)).eq.1) then
-                              if(random().lt.sin2cabibbo) then
-                                    iwa(j)=sign(3,iwa(j))
+            else
+                  if(random().lt.0.5) then
+                        plusCBdecay=1
+                  else
+                        plusCBdecay=0
+                  endif
+                  if(plusCBdecay.eq.1) then
+                        iwa(1)=-5
+                        iwa(2)=4
+                        do j=3,4,1
+                              if(abs(iwa(j)).eq.1) then
+                                    if(random().lt.sin2cabibbo) then
+                                          iwa(j)=sign(3,iwa(j))
+                                    endif
+                              elseif(abs(iwa(j)).eq.3) then
+                                    if(random().lt.sin2cabibbo) then
+                                          iwa(j)=sign(1,iwa(j))
+                                    endif
                               endif
-                        elseif(abs(iwa(j)).eq.3) then
-                              if(random().lt.sin2cabibbo) then
-                                    iwa(j)=sign(1,iwa(j))
+                        enddo
+                  elseif(plusCBdecay.eq.0) then
+                        iwa(3)=5
+                        iwa(4)=-4
+                        do j=1,2,1
+                              if(abs(iwa(j)).eq.1) then
+                                    if(random().lt.sin2cabibbo) then
+                                          iwa(j)=sign(3,iwa(j))
+                                    endif
+                              elseif(abs(iwa(j)).eq.3) then
+                                    if(random().lt.sin2cabibbo) then
+                                          iwa(j)=sign(1,iwa(j))
+                                    endif
                               endif
-                        endif
-                  enddo
+                        enddo
+                  endif
             endif
       else
+c here normal cabbibo mixing(powheg native)
 c if any is down or strange, it may turn to
 c strange/down with a probability sin^2 theta
             do j=1,4,1
